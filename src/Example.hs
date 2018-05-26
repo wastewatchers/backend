@@ -14,6 +14,7 @@ import qualified Hasql.Decoders as D
 import Hasql.Query
 
 import Data.Text (Text)
+import Data.Text.Encoding as TE
 import qualified Data.Text.Lazy as T
 
 import Data.UUID
@@ -36,18 +37,13 @@ data Product = Product {
 -- addProduct(id: EAN13,name: text, manufacturer: text)
 prod :: E.Params Product
 prod =
-     contramap productId (E.value E.text)
+     contramap (TE.encodeUtf8 . productId) (E.value E.unknown)
   <> contramap name (E.value E.text)
   <> contramap manufacturer (E.nullableValue E.text)
 
   --  <> contramap asin (nullableParam text)
 cfg :: Settings
 cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
-
-rdb c = do
-  (Right _) <- flip run c $ sql "select 1+1"
-  release c
-
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
