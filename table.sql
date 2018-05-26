@@ -9,8 +9,8 @@ create table users(
 );
 
 create table products(
-    id EAN13 primary key,
-    asin char(10),
+    id char(13) primary key,
+--    asin char(10),
     name text not null,
     manufacturer text
 );
