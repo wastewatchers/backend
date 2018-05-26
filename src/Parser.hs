@@ -31,6 +31,11 @@ productP =
   <> contramap name (E.value E.text)
   <> contramap manufacturer (E.nullableValue E.text)
 
+userP :: E.Params User
+userP =
+     contramap userId (E.value E.uuid)
+  <> contramap username (E.value E.text)
+
 ratingP :: E.Params Rating
 ratingP =
      contramap ratingUserId (E.value E.uuid)
