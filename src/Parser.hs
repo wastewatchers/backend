@@ -31,3 +31,17 @@ productP =
   <> contramap name (E.value E.text)
   <> contramap manufacturer (E.nullableValue E.text)
 
+ratingP :: E.Params Rating
+ratingP =
+     contramap ratingUserId (E.value E.uuid)
+  <> contramap ratingProductId (E.value E.text)
+  <> contramap grade (E.value E.int4)
+  <> contramap vendor (E.value E.text)
+  <> contramap posted (E.value E.timestamptz)
+  <> contramap plastic (E.value E.text)
+  <> contramap weight (E.value E.int4)
+  <> contramap recyclable (E.value $ E.enum rtt)
+  where
+    rtt NonRecyclable = "non_recyclable"
+    rtt Recyclable = "recyclable"
+    rtt Compostable = "compostable"

@@ -26,6 +26,7 @@ library
                      , contravariant
                      , transformers
                      , bytestring
+                     , time
   default-language:    Haskell2010
 
 executable wastewatchers-exe

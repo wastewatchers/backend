@@ -2,9 +2,8 @@ drop table ratings;
 drop table users;
 drop table product_images;
 drop table products;
-drop type plastic_type;
 
-create type plastic_type as enum('PP', 'PET', 'PVC', 'PTFE');
+create type recyclability as enum ('non_recyclable', 'recyclable', 'compostable');
 
 create table users(
     id uuid primary key,
@@ -30,6 +29,7 @@ create table ratings(
     grade integer constraint grade_in_range check(grade >= 1 and grade <= 5),
     vendor text,
     posted timestamp with time zone,
-    pl_type plastic_type,
-    pl_weight integer
+    pl_type text,
+    pl_weight integer,
+    recyclable recyclability not null
 );
