@@ -32,6 +32,7 @@ import Parser
 import PutProduct
 import PutRating
 import GetProduct
+import GetRatingCount
 
 cfg :: Settings
 cfg = settings "172.16.56.232" 5432 "tobias" "" "wastewatchers"
@@ -41,6 +42,7 @@ app' conn = do
   putProduct conn
   putRating conn
   getProduct conn
+  getRatingCount conn
 
 runApp :: IO ()
 runApp = do
