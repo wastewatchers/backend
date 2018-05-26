@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
-module Parser (productP) where
+module Parser (productP, ratingP) where
 
 import           Data.Aeson (Value(..), object, (.=))
 import           Network.Wai (Application)

@@ -12,6 +12,8 @@ import Data.UUID
 
 import Data.Time.Clock
 
+import Web.Scotty
+
 data Picture = Picture {
   pictureId :: Int,
   imageData :: ByteString,
@@ -31,6 +33,12 @@ data Product = Product {
   } deriving (Eq, Show)
 
 data Recyclability = NonRecyclable | Recyclable | Compostable deriving (Eq, Show)
+
+instance Parsable Recyclability where
+  parseParam "non_recyclable" = Right NonRecyclable
+  parseParam "recyclable" = Right Recyclable
+  parseParam "compostable" = Right Compostable
+  parseParam _ = Left "Unkown recyclability"
 
 data Rating = Rating {
   ratingUserId :: UUID,
