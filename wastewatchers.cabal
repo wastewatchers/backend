@@ -24,6 +24,7 @@ library
                      , uuid
                      , text
                      , contravariant
+                     , transformers
   default-language:    Haskell2010
 
 executable wastewatchers-exe
