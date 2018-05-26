@@ -31,6 +31,7 @@ import Parser
 
 import PutProduct
 import PutRating
+import GetProduct
 
 cfg :: Settings
 cfg = settings "172.16.56.232" 5432 "tobias" "" "wastewatchers"
@@ -39,17 +40,7 @@ app' :: Connection -> S.ScottyM ()
 app' conn = do
   putProduct conn
   putRating conn
-
-  S.get "/product/:id" $ do
-    ean <- S.param "id"
-    let rw = (,,) <$> D.value D.text <*> D.value D.text <*> D.value D.text
-        sq = "select id, name, manufacturer from products where id = $1"
-        ienc = contramap TE.encodeUtf8 (E.value E.unknown)
-        st = statement sq ienc (D.singleRow rw) True
-    res <- lift $ flip run conn $ query (ean :: Text) st
-    case res of
-      Left err -> S.raise . T.pack . show $ err
-      Right val -> S.json val
+  getProduct conn
 
 runApp :: IO ()
 runApp = do
