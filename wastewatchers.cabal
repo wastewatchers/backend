@@ -20,6 +20,10 @@ library
                      , aeson
                      , scotty
                      , wai
+                     , hasql
+                     , uuid
+                     , text
+                     , contravariant
   default-language:    Haskell2010
 
 executable wastewatchers-exe
