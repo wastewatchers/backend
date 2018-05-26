@@ -29,22 +29,14 @@ import Control.Monad.Trans.Class
 import Types
 import Parser
 
+import PutProduct
+
 cfg :: Settings
 cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
-  S.put "/product/:id" $ do
-    ean <- S.param "id"
-    name <- S.param "name"
-    manufacturer <- S.param "manufacturer"
-    let sq = "insert into products (id, name, manufacturer) values ($1, $2, $3)"
-        st = statement sq productP D.unit True
-        pr = Product ean name (Just manufacturer)
-    res <- lift $ flip run conn $ query pr st
-    case res of
-      Left err -> S.raise . T.pack . show $ err
-      Right _ -> S.json pr
+  putProduct conn
 
   S.get "/product/:id" $ do
     ean <- S.param "id"
