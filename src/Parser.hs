@@ -36,6 +36,12 @@ userP =
      contramap userId (E.value E.uuid)
   <> contramap username (E.value E.text)
 
+imagesP :: E.Params Image
+imagesP =
+     contramap imageId (E.value E.uuid)
+  <> contramap imageData (E.value E.bytea)
+  <> contramap imageProductId (E.value E.text)
+
 recyclabilityP :: E.Value Recyclability
 recyclabilityP = contramap rtt E.text
   where

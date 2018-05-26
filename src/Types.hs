@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
-module Types (Product(..), User(..), Rating(..), Recyclability(..)) where
+module Types (Product(..), User(..), Rating(..), Recyclability(..), Image(..)) where
 
 import Data.Text (Text)
 
@@ -14,10 +14,10 @@ import Data.Time.Clock
 
 import Web.Scotty
 
-data Picture = Picture {
-  pictureId :: Int,
+data Image = Image {
+  imageId :: UUID,
   imageData :: ByteString,
-  picProductId :: Text
+  imageProductId :: Text
   } deriving (Eq, Show)
 
 data User = User {

@@ -19,7 +19,7 @@ create table products(
 );
 
 create table product_images(
-    id serial primary key,
+    id uuid primary key,
     productid char(13) references products(id),
     image_data bytea not null
 );
