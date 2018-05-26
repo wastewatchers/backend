@@ -37,10 +37,22 @@ app' conn = do
     manufacturer <- S.param "manufacturer"
     let sq = "insert into products (id, name, manufacturer) values ($1, $2, $3)"
         st = statement sq productP D.unit True
-    res <- lift $ flip run conn $ query (Product ean name (Just manufacturer)) st
+        pr = Product ean name (Just manufacturer)
+    res <- lift $ flip run conn $ query pr st
     case res of
       Left err -> S.raise . T.pack . show $ err
-      Right _ -> S.text "test"
+      Right _ -> S.json pr
+
+  S.get "/product/:id" $ do
+    ean <- S.param "id"
+    let rw = (,,) <$> D.value D.text <*> D.value D.text <*> D.value D.text
+        sq = "select id, name, manufacturer from products where id = $1"
+        ienc = contramap TE.encodeUtf8 (E.value E.unknown)
+        st = statement sq ienc (D.singleRow rw) True
+    res <- lift $ flip run conn $ query (ean :: Text) st
+    case res of
+      Left err -> S.raise . T.pack . show $ err
+      Right val -> S.json val
 
   S.get "/" $ do
     S.text "hello"

@@ -27,7 +27,7 @@ import Types
 
 productP :: E.Params Product
 productP =
-     contramap (TE.encodeUtf8 . productId) (E.value E.unknown)
+     contramap productId (E.value E.text)
   <> contramap name (E.value E.text)
   <> contramap manufacturer (E.nullableValue E.text)
 
