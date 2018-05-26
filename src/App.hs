@@ -30,13 +30,15 @@ import Types
 import Parser
 
 import PutProduct
+import PutRating
 
 cfg :: Settings
-cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
+cfg = settings "172.16.56.232" 5432 "tobias" "" "wastewatchers"
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
   putProduct conn
+  putRating conn
 
   S.get "/product/:id" $ do
     ean <- S.param "id"
@@ -48,31 +50,6 @@ app' conn = do
     case res of
       Left err -> S.raise . T.pack . show $ err
       Right val -> S.json val
-
-  S.put "/rating/:id" $ do
-    ean <- S.param "id"
-    uid <- S.param "uid"
-    grade <- S.param "grade"
-    vendor <- S.param "vendor"
-    ptype <- S.param "ptype" -- plastic type
-    weight <- S.param "weight"
-    time <- lift $ getCurrentTime
-    recyclable <- S.param "recyclable"
-    let sq = "insert into ratings \
-              \(userid, productid, grade, vendor, posted, pl_type, pl_weight, recyclable) \
-              \values ($1, $2, $3, $4, $5, $6, $7, $8)"
-        st = statement sq ratingP D.unit True
-        rt = Rating (fromJust . fromText $ uid) ean grade vendor time ptype weight (recyclable :: Recyclability)
-    res <- lift $ flip run conn $ query rt st
-    case res of
-      Left err -> S.raise . T.pack . show $ err
-      Right _ -> S.text "test"
-
-  S.get "/" $ do
-    S.text "hello"
-
-  S.get "/some-json" $ do
-    S.json $ object ["foo" .= Number 23, "bar" .= Number 42]
 
 runApp :: IO ()
 runApp = do
