@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
-module Example (runApp) where
+module App (runApp) where
 
 import           Data.Aeson (Value(..), object, (.=))
 import           Network.Wai (Application)
@@ -23,25 +23,9 @@ import Data.Monoid ((<>))
 
 import Control.Monad.Trans.Class
 
-data User = User {
-  userId :: UUID,
-  username :: Text
-  } deriving (Eq, Show)
+import Types
+import Parser
 
-data Product = Product {
-  productId :: Text,
---  asin :: Maybe Text,
-  name :: Text,
-  manufacturer :: Maybe Text
-  } deriving (Eq, Show)
--- addProduct(id: EAN13,name: text, manufacturer: text)
-prod :: E.Params Product
-prod =
-     contramap (TE.encodeUtf8 . productId) (E.value E.unknown)
-  <> contramap name (E.value E.text)
-  <> contramap manufacturer (E.nullableValue E.text)
-
-  --  <> contramap asin (nullableParam text)
 cfg :: Settings
 cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
 
@@ -52,7 +36,7 @@ app' conn = do
     name <- S.param "name"
     manufacturer <- S.param "manufacturer"
     let sq = "insert into products (id, name, manufacturer) values ($1, $2, $3)"
-        st = statement sq prod D.unit True
+        st = statement sq productP D.unit True
     res <- lift $ flip run conn $ query (Product ean name (Just manufacturer)) st
     case res of
       Left err -> S.raise . T.pack . show $ err
