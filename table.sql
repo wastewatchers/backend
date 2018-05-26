@@ -3,7 +3,8 @@ drop table users;
 drop table product_images;
 drop table products;
 
-create type recyclability as enum ('non_recyclable', 'recyclable', 'compostable');
+--drop type recyclability;
+--create type recyclability as enum ('non_recyclable', 'recyclable', 'compostable');
 
 create table users(
     id uuid primary key,
@@ -31,5 +32,6 @@ create table ratings(
     posted timestamp with time zone,
     pl_type text,
     pl_weight integer,
-    recyclable recyclability not null
+    recyclable text not null
+--    recyclable recyclability not null
 );
