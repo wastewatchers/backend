@@ -30,7 +30,7 @@ import Types
 import Parser
 
 cfg :: Settings
-cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
+cfg = settings "172.16.56.232" 5432 "tobias" "" "wastewatchers"
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
@@ -70,7 +70,7 @@ app' conn = do
               \(userid, productid, grade, vendor, posted, pl_type, pl_weight, recyclable) \
               \values ($1, $2, $3, $4, $5, $6, $7, $8)"
         st = statement sq ratingP D.unit True
-        rt = Rating (fromJust . fromText $ uid) ean grade vendor time ptype weight recyclable
+        rt = Rating (fromJust . fromText $ uid) ean grade vendor time ptype weight (recyclable :: Recyclability)
     res <- lift $ flip run conn $ query rt st
     case res of
       Left err -> S.raise . T.pack . show $ err

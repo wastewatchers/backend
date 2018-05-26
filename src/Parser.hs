@@ -36,6 +36,13 @@ userP =
      contramap userId (E.value E.uuid)
   <> contramap username (E.value E.text)
 
+recyclabilityP :: E.Value Recyclability
+recyclabilityP = contramap rtt E.text
+  where
+    rtt NonRecyclable = "non_recyclable"
+    rtt Recyclable = "recyclable"
+    rtt Compostable = "compostable"
+
 ratingP :: E.Params Rating
 ratingP =
      contramap ratingUserId (E.value E.uuid)
@@ -45,8 +52,4 @@ ratingP =
   <> contramap posted (E.value E.timestamptz)
   <> contramap plastic (E.value E.text)
   <> contramap weight (E.value E.int4)
-  <> contramap recyclable (E.value $ E.enum rtt)
-  where
-    rtt NonRecyclable = "non_recyclable"
-    rtt Recyclable = "recyclable"
-    rtt Compostable = "compostable"
+  <> contramap recyclable (E.value recyclabilityP)
