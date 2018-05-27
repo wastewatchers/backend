@@ -23,7 +23,7 @@ summaryR = (,,,,) <$> D.value D.text <*> D.value D.text <*> D.value D.text <*> D
 getSummaryS :: Query Text (Text, Text, Text, Double, Double)
 getSummaryS = statement sq (E.value E.text) (D.singleRow summaryR) True
     where
-        sq = "select p.name, max(r.recyclable), max(r.pl_type), avg(r.grade), avg(r.pl_weight) from ratings r, products p where p.id = r.productid and r.pl_weight > 0 and r.productid = $1 group by p.id"
+        sq = "select p.name, max(r.recyclable), max(r.pl_type), avg(cast(r.grade as float)), avg(cast(r.pl_weight as float)) from ratings r, products p where p.id = r.productid and r.pl_weight > 0 and r.productid = $1 group by p.id"
 
 getImagesS :: Query Text [UUID]
 getImagesS = statement sq (E.value E.text) (D.rowsList (D.value D.uuid)) True
