@@ -15,11 +15,12 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Types, Parser, App, PutProduct, PutRating, GetProduct, GetRatingCount, GetRatingRaw
+  exposed-modules:     Types, Parser, App, PutProduct, PutRating, GetProduct, GetRatingCount, GetRatingRaw, PutImage
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , scotty
                      , wai
+                     , wai-extra
                      , hasql
                      , uuid
                      , text
@@ -27,6 +28,7 @@ library
                      , transformers
                      , bytestring
                      , time
+                     , random
   default-language:    Haskell2010
 
 executable wastewatchers-exe

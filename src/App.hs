@@ -18,6 +18,7 @@ import Network.Wai.Middleware.RequestLogger
 import Data.Text (Text)
 import Data.Text.Encoding as TE
 import qualified Data.Text.Lazy as T
+import qualified Data.ByteString.Lazy as BS
 
 import Data.UUID
 import Data.Functor.Contravariant
@@ -36,6 +37,7 @@ import PutRating
 import GetProduct
 import GetRatingCount
 import GetRatingRaw
+import PutImage
 
 cfg :: Settings
 cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
@@ -49,6 +51,19 @@ app' conn = do
   getProduct conn
   getRatingCount conn
   getRatingRaw conn
+
+  S.get "/image/:imageid" $ do
+    uuid <- S.param "imageid"
+    let rw = D.value D.bytea
+        sq = "select image_data from product_images where id = $1"
+        ienc = E.value E.text
+        st = statement sq ienc (D.singleRow rw) True
+    res <- lift $ flip run conn $ query uuid st
+    case res of
+      Left err -> S.raise . T.pack . show $ err
+      Right val -> do
+        S.setHeader "Content-Type" "image/jpeg"
+        S.raw $ BS.fromStrict val
 
 runApp :: IO ()
 runApp = do
