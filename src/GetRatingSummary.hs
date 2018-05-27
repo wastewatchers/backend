@@ -33,15 +33,14 @@ getImagesS = statement sq (E.value E.text) (D.rowsList (D.value D.uuid)) True
 getRatingSummary :: Connection -> S.ScottyM ()
 getRatingSummary conn = S.get "/rating/:id/summary" $ do
     ean <- S.param "id"
-    obj <- runQuery $ do
+    runQuery $ do
         (nm, re, pt, ag, aw) <- query ean getSummaryS
         imgs <- query ean getImagesS
         pure $ object [
             "name" .= nm, "recyclable" .= re,
             "images" .= imgs, "plastic_type" .= pt,
             "average_grade" .= ag, "average_weight" .= aw ]
-    S.json obj
   where
     handleResult = either (S.raise . T.pack . show) pure
-    runQuery = handleResult <=< lift . flip run conn
+    runQuery = S.json <=< handleResult <=< lift . flip run conn
 
