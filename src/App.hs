@@ -48,6 +48,7 @@ app' conn = do
 
   putProduct conn
   putRating conn
+  putImage conn
   getProduct conn
   getRatingCount conn
   getRatingRaw conn
