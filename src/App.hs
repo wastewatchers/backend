@@ -56,10 +56,10 @@ app' conn = do
   getRatingSummary conn
 
   S.get "/image/:imageid" $ do
-    uuid <- S.param "imageid"
+    uuid <- fromJust . fromText <$> S.param "imageid"
     let rw = D.value D.bytea
         sq = "select image_data from product_images where id = $1"
-        ienc = E.value E.text
+        ienc = E.value E.uuid
         st = statement sq ienc (D.singleRow rw) True
     res <- lift $ flip run conn $ query uuid st
     case res of
