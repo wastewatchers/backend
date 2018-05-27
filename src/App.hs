@@ -13,6 +13,8 @@ import qualified Hasql.Decoders as D
 --import Hasql.Statement
 import Hasql.Query
 
+import Network.Wai.Middleware.RequestLogger
+
 import Data.Text (Text)
 import Data.Text.Encoding as TE
 import qualified Data.Text.Lazy as T
@@ -36,10 +38,12 @@ import GetRatingCount
 import GetRatingRaw
 
 cfg :: Settings
-cfg = settings "172.16.51.71" 5432 "tobias" "" "wastewatchers"
+cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
+  S.middleware logStdout
+
   putProduct conn
   putRating conn
   getProduct conn
