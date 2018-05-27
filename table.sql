@@ -27,7 +27,7 @@ create table product_images(
 create table ratings(
     userid uuid not null,
     productid varchar(40) references products(id),
-    grade integer not null constraint grade_in_range check(grade >= 1 and grade <= 5),
+    grade integer not null constraint grade_in_range check(grade >= 1 and grade <= 3),
     vendor text,
     posted timestamp with time zone not null,
     pl_type text not null,

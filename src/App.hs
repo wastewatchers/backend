@@ -37,7 +37,11 @@ import PutRating
 import GetProduct
 import GetRatingCount
 import GetRatingRaw
+<<<<<<< HEAD
 import PutImage
+=======
+import GetRatingSummary
+>>>>>>> sdgf
 
 cfg :: Settings
 cfg = settings "localhost" 5432 "tobias" "" "wastewatchers"
@@ -52,6 +56,7 @@ app' conn = do
   getProduct conn
   getRatingCount conn
   getRatingRaw conn
+  getRatingSummary conn
 
   S.get "/image/:imageid" $ do
     uuid <- S.param "imageid"

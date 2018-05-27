@@ -1,5 +1,7 @@
-{-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
+{-# LANGUAGE OverloadedStrings, QuasiQuotes, DeriveGeneric #-}
 module Types (Product(..), User(..), Rating(..), Recyclability(..), Image(..)) where
+
+import GHC.Generics
 
 import Data.Text (Text)
 
@@ -32,8 +34,14 @@ data Product = Product {
   manufacturer :: Maybe Text
   } deriving (Eq, Show)
 
-data Recyclability = NonRecyclable | Recyclable | Compostable deriving (Eq, Show)
+instance ToJSON Product where
+  toJSON (Product productId name manufacturer) = object ["id" .= productId, "name" .= name, "manufacturer" .= manufacturer]
+  toEncoding (Product productId name manufacturer) = pairs ("id" .= productId <> "name" .= name <> "manufacturer" .= manufacturer)
 
+data Recyclability = NonRecyclable | Recyclable | Compostable deriving (Eq, Show, Generic)
+
+instance ToJSON Recyclability where
+  toEncoding = genericToEncoding defaultOptions
 instance Parsable Recyclability where
   parseParam "non_recyclable" = Right NonRecyclable
   parseParam "recyclable" = Right Recyclable
@@ -49,8 +57,10 @@ data Rating = Rating {
   plastic :: Text,
   weight :: Int32,
   recyclable :: Recyclability
-} deriving (Eq, Show)
+} deriving (Eq, Show, Generic)
 
-instance ToJSON Product where
-  toJSON (Product productId name manufacturer) = object ["id" .= productId, "name" .= name, "manufacturer" .= manufacturer]
-  toEncoding (Product productId name manufacturer) = pairs ("id" .= productId <> "name" .= name <> "manufacturer" .= manufacturer)
+instance ToJSON Rating where
+  toEncoding = genericToEncoding defaultOptions
+  {-toJSON (Rating uid pid grade vendor posted plastic weight recyc) =
+    object ["uid" .= uid, "pid" .= pid ]
+    -}
