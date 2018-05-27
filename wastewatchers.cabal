@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Types, Parser, App, PutProduct, PutRating, GetProduct, GetRatingCount
+  exposed-modules:     Types, Parser, App, PutProduct, PutRating, GetProduct, GetRatingCount, GetRatingRaw
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , scotty

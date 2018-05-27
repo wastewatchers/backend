@@ -33,9 +33,10 @@ import PutProduct
 import PutRating
 import GetProduct
 import GetRatingCount
+import GetRatingRaw
 
 cfg :: Settings
-cfg = settings "172.16.56.232" 5432 "tobias" "" "wastewatchers"
+cfg = settings "172.16.51.71" 5432 "tobias" "" "wastewatchers"
 
 app' :: Connection -> S.ScottyM ()
 app' conn = do
@@ -43,6 +44,7 @@ app' conn = do
   putRating conn
   getProduct conn
   getRatingCount conn
+  getRatingRaw conn
 
 runApp :: IO ()
 runApp = do

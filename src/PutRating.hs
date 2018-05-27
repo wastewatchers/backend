@@ -34,4 +34,4 @@ putRating conn =
     res <- lift $ flip run conn $ query rt st
     case res of
       Left err -> S.raise . T.pack . show $ err
-      Right _ -> S.text "test"
+      Right _ -> S.text "test" --S.json rt
