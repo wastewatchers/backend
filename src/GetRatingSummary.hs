@@ -45,6 +45,5 @@ getRatingSummary conn = S.get "/rating/:id/summary" $ do
     S.json obj
   where
     handleResult = either (S.raise . T.pack . show) pure
-    --runQuery ean st = ((lift . run (query ean st)) >=> handleResult) conn
     runQuery = handleResult <=< lift . flip run conn
 
