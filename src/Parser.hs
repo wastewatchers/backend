@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, QuasiQuotes #-}
-module Parser (productP, ratingP) where
+module Parser (productP, ratingP, imageP) where
 
 import           Data.Aeson (Value(..), object, (.=))
 import           Network.Wai (Application)
@@ -36,8 +36,8 @@ userP =
      contramap userId (E.value E.uuid)
   <> contramap username (E.value E.text)
 
-imagesP :: E.Params Image
-imagesP =
+imageP :: E.Params Image
+imageP =
      contramap imageId (E.value E.uuid)
   <> contramap imageData (E.value E.bytea)
   <> contramap imageProductId (E.value E.text)
